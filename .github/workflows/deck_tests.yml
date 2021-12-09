@@ -1,0 +1,54 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      #Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@master
+        
+      # Install Node.js environment
+      - name: set up node
+        uses: actions/setup-node@v1
+        with:
+            node-version: '12.x'
+
+      # Install newman
+      - name: Install newman
+        run: | 
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra  
+      
+      - name: Make Directory for results
+        run: mkdir -p testResults
+
+      # Run POSTMAN collection and output the file as html
+      - name: Run POSTMAN collection
+        run: |
+          newman run ./Postman Collections/deck_test_1.json -e ./Postman Collections/Deckofcards.postman_environment.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
+          
+      # Upload test results
+      - name: Output the run Details
+        uses: actions/upload-artifact@v2
+        with: 
+          name: RunReports
+          path: testResults 
