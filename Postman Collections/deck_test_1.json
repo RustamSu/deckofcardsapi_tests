@@ -1,0 +1,485 @@
+{
+  "info": {
+    "_postman_id": "ed33bd31-d880-4691-8c00-bdbd071717c6",
+    "name": "http://deckofcardsapi.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Shuffle the Cards",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "4e38a7ab-5d2e-4454-8576-b67ef02c836f",
+            "exec": [
+              "pm.environment.unset(\"count\");\r",
+              "//pm.environment.unset(\"randomNumber\");\r",
+              "pm.environment.unset(\"deck_id\");\r",
+              "pm.environment.unset(\"card_1\");"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "b0583e6a-54d5-4eb3-b509-b0124a3a77a9",
+            "exec": [
+              "var jsonData = pm.response.json();\r",
+              "pm.environment.set(\"deck_id\", jsonData.deck_id);\r",
+              "\r",
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 500ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"The deck_id is \" + (jsonData.deck_id), function () {});\r",
+              "\r",
+              "pm.test(\"The deck is full and contains \" + (jsonData.remaining) + \" cards\", function () {\r",
+              "    pm.expect(jsonData.remaining).to.eql(52);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "_postman_id": "b00e53df-3bc2-41bd-a92d-5946e6aa71d9",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1",
+          "protocol": "http",
+          "host": [
+            "deckofcardsapi",
+            "com"
+          ],
+          "path": [
+            "api",
+            "deck",
+            "new",
+            "shuffle",
+            ""
+          ],
+          "query": [
+            {
+              "key": "deck_count",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Draw a Card #1",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "11b158eb-63d7-4542-8415-456619d142a9",
+            "exec": [
+              "pm.environment.set('count', Math.floor(Math.random() * 5 + 1));"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "78671217-2e1b-46e0-aa5c-f829b48e817e",
+            "exec": [
+              "var jsonData = pm.response.json();\r",
+              "pm.environment.set(\"card_1\", jsonData.cards[0].code);\r",
+              "\r",
+              "pm.test(\"Response time is less than 500ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Body's deck_id is \" + (jsonData.deck_id) + \" and matches to deck_id from env\", function () {\r",
+              "    pm.expect(jsonData.deck_id).to.eql(pm.environment.get('deck_id'));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Drawn \" + pm.environment.get('count') + \" cards. Cards left in the deck \" + jsonData.remaining, function () {\r",
+              "//    pm.expect(jsonData.remaining).to.eql(jsonData.remaining);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "_postman_id": "9d0754a6-3472-41e8-849d-81063450fe91",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://deckofcardsapi.com/api/deck/{{deck_id}}/draw/?count={{count}}",
+          "protocol": "http",
+          "host": [
+            "deckofcardsapi",
+            "com"
+          ],
+          "path": [
+            "api",
+            "deck",
+            "{{deck_id}}",
+            "draw",
+            ""
+          ],
+          "query": [
+            {
+              "key": "count",
+              "value": "{{count}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Draw a Card #2",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "ead35a3c-e3fa-4b1d-b2c5-bdafd5f8f8f0",
+            "exec": [
+              "pm.environment.set('count', Math.floor(Math.random() * 5 + 1));"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "4af63fab-0872-4fce-961d-4f620c8a8eda",
+            "exec": [
+              "var jsonData = pm.response.json();\r",
+              "//pm.environment.set(\"card_1\", jsonData.cards[0].code);\r",
+              "\r",
+              "pm.test(\"Response time is less than 500ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Body's deck_id is \" + (jsonData.deck_id) + \" and matches to deck_id from env\", function () {\r",
+              "    pm.expect(jsonData.deck_id).to.eql(pm.environment.get('deck_id'));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Drawn \" + pm.environment.get('count') + \" cards. Cards left in the deck \" + jsonData.remaining, function ()  {\r",
+              "//    pm.expect(jsonData.remaining).to.eql(jsonData.remaining);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "_postman_id": "64bde846-2203-42d3-8e86-2622d494fc77",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://deckofcardsapi.com/api/deck/{{deck_id}}/draw/?count={{count}}",
+          "protocol": "http",
+          "host": [
+            "deckofcardsapi",
+            "com"
+          ],
+          "path": [
+            "api",
+            "deck",
+            "{{deck_id}}",
+            "draw",
+            ""
+          ],
+          "query": [
+            {
+              "key": "count",
+              "value": "{{count}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Draw a Card #3",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "6a84dedc-3e13-490e-8e31-e1c08f8a8a7f",
+            "exec": [
+              "pm.environment.set('count', Math.floor(Math.random() * 5 + 1));"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "63da4454-b29c-45ad-b890-679f099d3724",
+            "exec": [
+              "var jsonData = pm.response.json();\r",
+              "//pm.environment.set(\"card_1\", jsonData.cards[0].code);\r",
+              "\r",
+              "pm.test(\"Response time is less than 500ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Body's deck_id is \" + (jsonData.deck_id) + \" and matches to deck_id from env\", function () {\r",
+              "    pm.expect(jsonData.deck_id).to.eql(pm.environment.get('deck_id'));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Drawn \" + pm.environment.get('count') + \" cards. Cards left in the deck \" + jsonData.remaining, function ()  {\r",
+              "//    pm.expect(jsonData.remaining).to.eql(jsonData.remaining);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "_postman_id": "49dabf63-237b-4ebe-8e91-af4d0a0e1506",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://deckofcardsapi.com/api/deck/{{deck_id}}/draw/?count={{count}}",
+          "protocol": "http",
+          "host": [
+            "deckofcardsapi",
+            "com"
+          ],
+          "path": [
+            "api",
+            "deck",
+            "{{deck_id}}",
+            "draw",
+            ""
+          ],
+          "query": [
+            {
+              "key": "count",
+              "value": "{{count}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Draw a Card #4",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "769d1394-d359-4f69-9135-43fafb4ad3a3",
+            "exec": [
+              "pm.environment.set('count', Math.floor(Math.random() * 5 + 1));"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "f64f8a29-eaed-4f58-ac85-d044df0bd53b",
+            "exec": [
+              "var jsonData = pm.response.json();\r",
+              "//pm.environment.set(\"card_1\", jsonData.cards[0].code);\r",
+              "\r",
+              "pm.test(\"Response time is less than 500ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Body's deck_id is \" + (jsonData.deck_id) + \" and matches to deck_id from env\", function () {\r",
+              "    pm.expect(jsonData.deck_id).to.eql(pm.environment.get('deck_id'));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Drawn \" + pm.environment.get('count') + \" cards. Cards left in the deck \" + jsonData.remaining, function ()  {\r",
+              "//    pm.expect(jsonData.remaining).to.eql(jsonData.remaining);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "_postman_id": "aa6e81a9-89f1-407f-88b7-0653a537a79f",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://deckofcardsapi.com/api/deck/{{deck_id}}/draw/?count={{count}}",
+          "protocol": "http",
+          "host": [
+            "deckofcardsapi",
+            "com"
+          ],
+          "path": [
+            "api",
+            "deck",
+            "{{deck_id}}",
+            "draw",
+            ""
+          ],
+          "query": [
+            {
+              "key": "count",
+              "value": "{{count}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Draw a Card #5",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "ae349575-fad4-4b3a-a77a-9a5caf4d7935",
+            "exec": [
+              "pm.environment.set('count', Math.floor(Math.random() * 5 + 1));"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "85dea92b-df59-4e87-9cbc-9882778e6c88",
+            "exec": [
+              "var jsonData = pm.response.json();\r",
+              "//pm.environment.set(\"card_1\", jsonData.cards[0].code);\r",
+              "\r",
+              "pm.test(\"Response time is less than 500ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Body's deck_id is \" + (jsonData.deck_id) + \" and matches to deck_id from env\", function () {\r",
+              "    pm.expect(jsonData.deck_id).to.eql(pm.environment.get('deck_id'));\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Drawn \" + pm.environment.get('count') + \" cards. Cards left in the deck \" + jsonData.remaining, function ()  {\r",
+              "//    pm.expect(jsonData.remaining).to.eql(jsonData.remaining);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "_postman_id": "35e3c6a3-2ad1-4ed9-aef3-e6fc7bc4cc4d",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://deckofcardsapi.com/api/deck/{{deck_id}}/draw/?count={{count}}",
+          "protocol": "http",
+          "host": [
+            "deckofcardsapi",
+            "com"
+          ],
+          "path": [
+            "api",
+            "deck",
+            "{{deck_id}}",
+            "draw",
+            ""
+          ],
+          "query": [
+            {
+              "key": "count",
+              "value": "{{count}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Returning cards to the deck",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "074ab7c6-34d4-467c-94fa-e5965c741a95",
+            "exec": [
+              "var jsonData = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Response time is less than 500ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Cards left in the deck \" + jsonData.remaining, function () {\r",
+              "//    pm.expect(jsonData.remaining).to.eql(jsonData.remaining);\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "6bd4883b-4937-4fd1-9ac0-dd17ccb2d61b",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "_postman_id": "81ec989e-6b24-49fa-a982-8fa282d1bba0",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://deckofcardsapi.com/api/deck/{{deck_id}}/return/?cards={{card_1}}",
+          "protocol": "http",
+          "host": [
+            "deckofcardsapi",
+            "com"
+          ],
+          "path": [
+            "api",
+            "deck",
+            "{{deck_id}}",
+            "return",
+            ""
+          ],
+          "query": [
+            {
+              "key": "cards",
+              "value": "{{card_1}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
