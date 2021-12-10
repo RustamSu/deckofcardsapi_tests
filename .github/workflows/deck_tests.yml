@@ -38,13 +38,13 @@ jobs:
           npm install -g newman
           npm install -g newman-reporter-htmlextra  
       
-      - name: Make Directory for results
-        run: mkdir -p testResults
+      #- name: Make Directory for results
+      #  run: mkdir -p testResults
 
       # Run POSTMAN collection and output the file as html
       - name: Run POSTMAN collection
         run: |
-          newman run ./Postman Collections/deck_test_1.json -e ./Postman Collections/Deckofcards.postman_environment.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
+          newman run ./deckofcardsapi_tests/Postman Collections/deck_test_1.json -e ./deckofcardsapi_tests/Postman Collections/Deckofcards.postman_environment.json -r htmlextra --reporter-htmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
           
       # Upload test results
       - name: Output the run Details
