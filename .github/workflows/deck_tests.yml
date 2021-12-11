@@ -44,7 +44,7 @@ jobs:
       # Run POSTMAN collection and output the file as html
       - name: Run POSTMAN collection
         run: |
-          newman run ./Postman_Collections/deck_test_1.json -e ./Postman_Collections/Deckofcards.postman_environment.json -r htmlextra --reporter-htmlextra-export ./testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
+          newman run ./Postman_Collections/deck_test_1.json -r htmlextra --reporter-htmlextra-export ./testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
 
       # Upload test results
       - name: Output the run Details
